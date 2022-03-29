@@ -267,10 +267,15 @@ public class SpringApplication {
 	public SpringApplication(ResourceLoader resourceLoader, Class<?>... primarySources) {
 		this.resourceLoader = resourceLoader;
 		Assert.notNull(primarySources, "PrimarySources must not be null");
+		// 通常启动类为 primarySource
 		this.primarySources = new LinkedHashSet<>(Arrays.asList(primarySources));
+		// 从类路径中推断 WebApplicationType 类型
 		this.webApplicationType = WebApplicationType.deduceFromClasspath();
+		// 初始化ApplicationContextInitializer列表和ApplicationListener
+		// 去 META_INF/spring.factories 中读取
 		setInitializers((Collection) getSpringFactoriesInstances(ApplicationContextInitializer.class));
 		setListeners((Collection) getSpringFactoriesInstances(ApplicationListener.class));
+		// 推断含有 main 方法的主类
 		this.mainApplicationClass = deduceMainApplicationClass();
 	}
 
@@ -296,6 +301,7 @@ public class SpringApplication {
 	 * @return a running {@link ApplicationContext}
 	 */
 	public ConfigurableApplicationContext run(String... args) {
+		// 统计启动时间
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 		ConfigurableApplicationContext context = null;
@@ -1232,7 +1238,10 @@ public class SpringApplication {
 	 * @param args the application arguments (usually passed from a Java main method)
 	 * @return the running {@link ApplicationContext}
 	 */
+	// LUQIUDO
+	// ☀️☀️☀️☀️️☀️ SpringBoot 应用的主入口
 	public static ConfigurableApplicationContext run(Class<?> primarySource, String... args) {
+		// 调用另一个重载的方法
 		return run(new Class<?>[] { primarySource }, args);
 	}
 
@@ -1244,6 +1253,7 @@ public class SpringApplication {
 	 * @return the running {@link ApplicationContext}
 	 */
 	public static ConfigurableApplicationContext run(Class<?>[] primarySources, String[] args) {
+		// 创建一个 SpringApplication 调用非静态run方法
 		return new SpringApplication(primarySources).run(args);
 	}
 
